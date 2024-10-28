@@ -174,3 +174,21 @@ class Vendas(models.Model):
 
         sorted_produtos = sorted(produtos_quantidades.items(), key=lambda x: x[1], reverse=True)
         return sorted_produtos[:5]  # Retorna os 5 produtos mais pedidos
+    
+    @classmethod
+    def get_most_ordered_products_by_user(cls, lojista):
+        vendas_realizadas = cls.objects.filter(lojista=lojista, processo='realizado')
+        produtos_quantidades = {}
+
+        for venda in vendas_realizadas:
+            detalhes = json.loads(venda.detalhes)
+            for item in detalhes:
+                nome_produto = item['nome_produto']
+                quantidade = int(item['quantidade'])
+                if nome_produto in produtos_quantidades:
+                    produtos_quantidades[nome_produto] += quantidade
+                else:
+                    produtos_quantidades[nome_produto] = quantidade
+
+        sorted_produtos = sorted(produtos_quantidades.items(), key=lambda x: x[1], reverse=True)
+        return sorted_produtos[:5]

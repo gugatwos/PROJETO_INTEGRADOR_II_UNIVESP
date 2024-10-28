@@ -7,7 +7,6 @@ from django.contrib.auth.models import User
 import json
 from django.db import transaction
 
-
 @login_required
 def estoque_api(request):
     try:
@@ -134,10 +133,20 @@ def atualizar_status(request, venda_id):
 
 @login_required
 def produtos_mais_pedidos(request):
-    produtos_quantidades = Vendas.get_most_ordered_products()
-    produtos = [produto for produto, quantidade in produtos_quantidades]
-    quantidades = [quantidade for produto, quantidade in produtos_quantidades]
+    # Gráfico Geral
+    produtos_quantidades_geral = Vendas.get_most_ordered_products()
+    produtos_geral = [produto for produto, quantidade in produtos_quantidades_geral]
+    quantidades_geral = [quantidade for produto, quantidade in produtos_quantidades_geral]
+
+    # Gráfico por Usuário
+    lojista = request.user.lojista  # Assumindo que o `user` está relacionado com `Lojista`
+    produtos_quantidades_usuario = Vendas.get_most_ordered_products_by_user(lojista)
+    produtos_usuario = [produto for produto, quantidade in produtos_quantidades_usuario]
+    quantidades_usuario = [quantidade for produto, quantidade in produtos_quantidades_usuario]
+
     return render(request, 'produtos_mais_pedidos.html', {
-        'produtos': json.dumps(produtos),
-        'quantidades': json.dumps(quantidades),
+        'produtos_geral': json.dumps(produtos_geral),
+        'quantidades_geral': json.dumps(quantidades_geral),
+        'produtos_usuario': json.dumps(produtos_usuario),
+        'quantidades_usuario': json.dumps(quantidades_usuario),
     })

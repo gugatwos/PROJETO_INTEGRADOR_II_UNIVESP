@@ -80,10 +80,10 @@ WSGI_APPLICATION = 'Gestor_Pedidos_Frutos.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'database_fg',  # Nome do banco de dados
-        'USER': 'database_fg_user',  # Nome de usuário
-        'PASSWORD': 'zZE09M7F44no5My2KUKmpWT1ona9MQIf',  # Senha
-        'HOST': 'dpg-crqdb8dsvqrc73ctbe00-a.oregon-postgres.render.com',  # Host externo
+        'NAME': 'database_gestor_fg',  # Nome do banco de dados
+        'USER': 'database_gestor_fg_user',  # Nome de usuário
+        'PASSWORD': 'OyRIzUpTPJuyURXkieetPK4d6zN12dCC',  # Senha
+        'HOST': 'dpg-csfsr53tq21c73a88570-a.oregon-postgres.render.com',  # Host externo
         'PORT': '5432',  # Porta padrão do PostgreSQL
     }
 }

@@ -7,11 +7,6 @@
   body {
       font-family: 'Arial', sans-serif;
   }
-  .page-catalog header,
-  .page-catalog main,
-  .page-catalog footer {
-      padding: 1rem;
-  }
   .chart-container {
       width: 60%;
       margin: auto;
@@ -27,131 +22,82 @@
       margin-bottom: 1rem;
       color: #ffffff;
   }
-  .navbar-nav .nav-item .nav-link {
-      font-weight: bold;
-  }
-  .nav-link.active {
-      color: #ff6347 !important;
-  }
-/* CORREÇÕES */
-
-body, h1 {
-  color: #ffffff;
-}
-
-.active>.page-link, .page-link.active {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
-.page-link {
-  color: var(--primary-color);
-}
-
-table.dataTable {    
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-th {
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-td {
-  padding: 3px 5px !important;
-  vertical-align: middle;
-}
 </style>
 {% endblock 'head' %}
 
 {% block 'body' %}
-<script src="https://code.responsivevoice.org/responsivevoice.js?key=5uFfkLlK"></script>
-<body class="page-catalog">
-  <header class="bg-primary text-white py-2">
-    <nav class="container-fluid d-flex justify-content-between align-items-center">
-      <a href="{% url 'index' %}" class="text-white text-decoration-none">
-        <img src="{% static 'home/img/logo-frutos-de-goias.png' %}" class="w-50" alt="Logo"/>
-      </a>
-      <ul class="nav d-none d-md-flex">
-        <li class="nav-item"><a href="{% url 'estoque' %}" class="nav-link text-white">Estoque</a></li>
-        <li class="nav-item"><a href="{% url 'pedidos' %}" class="nav-link text-white">Pedidos</a></li>
-        <li class="nav-item"><a href="/home/sair/" class="nav-link text-white">Sair</a></li>
-      </ul>
-      <a href="{% url 'produtos_mais_pedidos' %}" class="text-white text-decoration-none">
-        <img src="{% static 'lojistas/img/arara-frutos.png' %}" class="w-50" alt="Logo"/>
-      </a>
-    </nav>
-  </header>
+<body>
+  <script src="https://code.responsivevoice.org/responsivevoice.js?key=5uFfkLlK"></script>
+  <body class="page-catalog">
+    <header class="bg-primary text-white py-2">
+      <nav class="container-fluid d-flex justify-content-between align-items-center">
+        <a href="{% url 'index' %}" class="text-white text-decoration-none">
+          <img src="{% static 'home/img/logo-frutos-de-goias.png' %}" class="w-50" alt="Logo"/>
+        </a>
+        <ul class="nav d-none d-md-flex">
+          <li class="nav-item"><a href="{% url 'estoque' %}" class="nav-link text-white">Estoque</a></li>
+          <li class="nav-item"><a href="{% url 'pedidos' %}" class="nav-link text-white">Pedidos</a></li>
+          <li class="nav-item"><a href="/home/sair/" class="nav-link text-white">Sair</a></li>
+        </ul>
+        <a href="{% url 'produtos_mais_pedidos' %}" class="text-white text-decoration-none">
+          <img src="{% static 'lojistas/img/arara-frutos.png' %}" class="w-50" alt="Logo"/>
+        </a>
+      </nav>
+    </header>
+  
 
-  <div class="container-fluid">
-    <h1 class="mb-4">Top 5 Produtos Vendidos na Região da Baixada Santista</h1>
+    <div class="container-fluid">
+    <h1>Top 5 Produtos Vendidos - Geral</h1>
     <div class="chart-container">
-      <canvas id="produtosMaisPedidosChart"></canvas>
+      <canvas id="produtosMaisPedidosGeral"></canvas>
+    </div>
+
+    <h1>Top 5 Produtos Vendidos - Por Usuário</h1>
+    <div class="chart-container">
+      <canvas id="produtosMaisPedidosUsuario"></canvas>
     </div>
   </main>
 
-  <footer class="bg-primary text-white py-2 fixed-bottom">
-    <div class="container">
-      <div class="row">
-        <div class="col-12 col-md-6">
-          <p class="m-0">Distribuidora localizada em Itanhaém da Frutos de Goiás</p>
-        </div>
-      </div>
-    </div>
-  </footer>
-
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      var ctx = document.getElementById('produtosMaisPedidosChart').getContext('2d');
-      var produtos = JSON.parse('{{ produtos|escapejs }}');
-      var quantidades = JSON.parse('{{ quantidades|escapejs }}');
+      // Gráfico Geral
+      var ctxGeral = document.getElementById('produtosMaisPedidosGeral').getContext('2d');
+      var produtosGeral = JSON.parse('{{ produtos_geral|escapejs }}');
+      var quantidadesGeral = JSON.parse('{{ quantidades_geral|escapejs }}');
 
-      var chart = new Chart(ctx, {
+      new Chart(ctxGeral, {
         type: 'bar',
         data: {
-          labels: produtos,
+          labels: produtosGeral,
           datasets: [{
-            label: 'Produtos Mais Pedidos',
-            data: quantidades,
-            backgroundColor: 'rgba(0, 128, 0)',
-            borderColor: 'rgba(87, 31, 115)',
+            label: 'Produtos Mais Vendidos - Geral',
+            data: quantidadesGeral,
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',
+            borderColor: 'rgba(54, 162, 235, 1)',
             borderWidth: 1
           }]
-        },
-        options: {
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                font: {
-                  size: 14,
-                  weight: 'bold'
-                }
-              }
-            },
-            x: {
-              ticks: {
-                font: {
-                  size: 10,
-                  weight: 'bold'
-                }
-              }
-            }
-          },
-          plugins: {
-            legend: {
-              labels: {
-                font: {
-                  size: 16,
-                  weight: 'bold'
-                }
-              }
-            }
-          }
+        }
+      });
+
+      // Gráfico por Usuário
+      var ctxUsuario = document.getElementById('produtosMaisPedidosUsuario').getContext('2d');
+      var produtosUsuario = JSON.parse('{{ produtos_usuario|escapejs }}');
+      var quantidadesUsuario = JSON.parse('{{ quantidades_usuario|escapejs }}');
+
+      new Chart(ctxUsuario, {
+        type: 'bar',
+        data: {
+          labels: produtosUsuario,
+          datasets: [{
+            label: 'Produtos Mais Vendidos - Usuário',
+            data: quantidadesUsuario,
+            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
         }
       });
     });
   </script>
 </body>
-{% endblock 'body' %}
+{% endblock %}
