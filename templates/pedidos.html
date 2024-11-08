@@ -3,81 +3,16 @@
 
 {% block 'head' %}
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-<style>
-  h1 {
-    font-weight: bold;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #ffffff;
-  }
-  .modal-body {
-    font-size: 1rem;
-  }
-  .details-table {
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-  .details-table th, .details-table td {
-    padding: 0.5rem;
-    border-bottom: 1px solid #ddd;
-  }
-  .details-table th {
-    background-color: #f8f9fa;
-    text-align: left;
-  }
-  .details-table td {
-    background-color: #fff;
-  }
-/* CORREÇÕES */
+<link rel="stylesheet" href="../../templates/static/lojistas/css/">
 
-body, h1 {
-  color: #ffffff;
-}
-
-.active>.page-link, .page-link.active {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
-.page-link {
-  color: var(--primary-color);
-}
-
-table.dataTable {    
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-th {
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-td {
-  padding: 3px 5px !important;
-  vertical-align: middle;
-}
-</style>
 {% endblock 'head' %}
 
 {% block 'body' %}
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=5uFfkLlK"></script>
 
 <body class="page-catalog">
-  <header class="bg-primary text-white py-2">
-    <nav class="container-fluid d-flex justify-content-between align-items-center">
-      <a href="{% url 'index' %}" class="text-white text-decoration-none">
-        <img src="{% static 'home/img/logo-frutos-de-goias.png' %}" class="w-50" alt="Logo"/>
-      </a>
-      <ul class="nav d-none d-md-flex">
-        <li class="nav-item"><a href="{% url 'estoque' %}" class="nav-link text-white">Estoque</a></li>
-        <li class="nav-item"><a href="{% url 'pedidos' %}" class="nav-link text-white">Pedidos</a></li>
-        <li class="nav-item"><a href="/home/sair/" class="nav-link text-white">Sair</a></li>
-      </ul>
-      <a href="{% url 'produtos_mais_pedidos' %}" class="text-white text-decoration-none">
-        <img src="{% static 'lojistas/img/arara-frutos.png' %}" class="w-50" alt="Logo"/>
-      </a>
-    </nav>
+  <header class="bg-primary text-white py-2"> 
+    {% include 'navbar.html' %}
   </header>
 
   <div class="container-fluid">
@@ -143,15 +78,7 @@ td {
   </table>
 </main>
 
-<footer class="bg-primary text-white py-3 fixed-bottom">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <p class="m-0">Distribuidora localizada em Itanhaém da Frutos de Goiás</p>
-      </div>
-    </div>
-  </div>
-</footer>
+{% include 'footer.html' %}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 {% endblock 'body' %}

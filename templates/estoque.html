@@ -4,93 +4,8 @@
 
 {% block 'head' %}
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-<style>
-  h1 {
-    font-weight: bold;
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: #040526;
-}
-    body {
-        font-size: 0.9rem;
-        color: #040526;
-    }
-    .page-catalog header,
-    .page-catalog main,
-    .page-catalog footer {
-        padding: 1rem;
-    }
-    .table {
-        font-size: 1rem;
-    }
-    .cart-drawer__overlay {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background: rgba(0, 0, 0, 0.5);
-        display: none;
-        z-index: 1040;
-    }
-    .cart-drawer__overlay.open {
-        display: block;
-    }
-    .cart-drawer {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 100%;
-        max-width: 300px;
-        height: 100%;
-        background: #fff;
-        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
-        z-index: 1041;
-    }
-    .cart-drawer__header,
-    .cart-drawer__footer {
-        padding: 1rem;
-    }
-    .cart-drawer__body {
-        overflow-y: auto;
-        padding: 1rem;
-    }
-    .cart-total {
-        font-weight: bold;
-    }
-/* CORREÇÕES */
+<link rel="stylesheet" href="{% static 'lojistas/css/estoque.css' %}">
 
-body, h1 {
-  color: #ffffff;
-}
-
-.active>.page-link, .page-link.active {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
-}
-
-.page-link {
-  color: var(--primary-color);
-}
-
-table.dataTable {    
-  border-radius: 5px;
-  overflow: hidden;
-}
-
-th {
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-td {
-  padding: 3px 5px !important;
-  vertical-align: middle;
-}
-#selecionadosTable_filter {
-  display: none;
-}
-</style>
 {% endblock 'head' %}
 
 {% block 'body' %}
@@ -98,27 +13,15 @@ td {
 
 <body class="page-catalog">
   <header class="bg-primary text-white py-2">
-    <nav class="container-fluid d-flex justify-content-between align-items-center">
-      <a href="{% url 'index' %}" class="text-white text-decoration-none">
-        <img src="{% static 'home/img/logo-frutos-de-goias.png' %}" class="w-50" alt="Logo"/>
-      </a>
-      <ul class="nav d-none d-md-flex">
-        <li class="nav-item"><a href="{% url 'estoque' %}" class="nav-link text-white">Estoque</a></li>
-        <li class="nav-item"><a href="{% url 'pedidos' %}" class="nav-link text-white">Pedidos</a></li>
-        <li class="nav-item"><a href="/home/sair/" class="nav-link text-white">Sair</a></li>
-      </ul>
-      <a href="{% url 'produtos_mais_pedidos' %}" class="text-white text-decoration-none">
-        <img src="{% static 'lojistas/img/arara-frutos.png' %}" class="w-50" alt="Logo"/>
-      </a>
-    </nav>
+    {% include 'navbar.html' %}
   </header>
 
   <div class="container-fluid">
-    <h1 class="mb-4">Estoque de Produtos da Distribuidora em Itanhaém</h1>
+    <h1 class="mb-4" style="margin-top:50px;">Estoque de Produtos da Distribuidora em Itanhaém</h1>
     <h3 class="mb-4">Selecione os produtos para a reserva:</h3>
 
     <!-- Tabela de Estoque -->
-    <div class="row mb-3">
+    <div class="row mb-3 table-responsive">
       <div class="col-lg-8">
         <table id="estoqueTable" class="table table-striped table-sm">
           <thead>
@@ -138,7 +41,7 @@ td {
         </table>
       </div>
       <!-- Tabela de Produtos Selecionados -->
-      <div class="col-lg-4">
+      <div class="col-lg-4 table-responsive">
         <h4 class="mb-4">Produtos Selecionados:</h4>
         <table id="selecionadosTable" class="table table-striped table-sm mb-3">
           <thead>
@@ -153,20 +56,15 @@ td {
             <!-- Produtos selecionados serão carregados aqui -->
           </tbody>
         </table>
-        <button class="btn btn-primary w-100" id="finalizarCompraBtn">Finalizar Reserva</button>
+        <button class="btn btn-primary w-100" id="finalizarCompraBtn" style="border: 1px solid #004C22; box-shadow: 5px 5px #004C22 ;">Finalizar Reserva</button>
       </div>
     </div>
   </main>
 
-  <footer class="bg-primary text-white py-2 fixed-bottom">
-    <div class="container">
-      <div class="row">
-        <div class="col-12 col-md-6">
-          <p class="m-0">Distribuidora localizada em Itanhaém da Frutos de Goiás</p>
-        </div>
-      </div>
-    </div>
-  </footer>
+
+  {% include 'footer.html' %}
+
+  
 
   <div class="cart-drawer__overlay">
     <div class="cart-drawer d-flex flex-column justify-content-between">
