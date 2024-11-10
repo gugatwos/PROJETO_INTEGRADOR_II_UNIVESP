@@ -181,5 +181,15 @@ td {
 }
 
 
-/*footer*/
+
+
+
+/*modal de estoque*/
+
+.modal{
+  top: 150px;
+  color: #000;
+}
+
+
 
