@@ -5,7 +5,6 @@
 {% block 'head' %}
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="{% static 'geral/css/style.css' %}">
-
 {% endblock 'head' %}
 
 {% block 'body' %}
@@ -19,6 +18,26 @@
   <div class="container-fluid">
     <h1 class="mb-4" style="margin-top:50px;">Estoque de Produtos da Distribuidora em Itanhaém</h1>
     <h3 class="mb-4">Selecione os produtos para a reserva:</h3>
+
+    <!-- Filtro de Subcategoria -->
+    <div class="mb-3">
+      <select id="subcategoriaFiltro" class="form-select">
+        <option value="">Todas as Subcategorias</option>
+        <option value="Paleta">Paleta</option>
+        <option value="Picolé Tradicional">Picolé Tradicional</option>
+        <option value="Picolé Especial">Picolé Especial</option>
+        <option value="Picolé Kids">Picolé Kids</option>
+        <option value="Massa 5 Litros">Massa 5 Litros</option>
+        <option value="Massa Açaí">Massa Açaí</option>
+        <option value="Massa Tradicional">Massa Tradicional</option>
+        <option value="Massa Especial">Massa Especial</option>
+        <option value="Pote Massa Açaí">Pote Massa Açaí</option>
+        <option value="Pote Massa Tradicional">Pote Massa Tradicional</option>
+        <option value="Pote Massa Especial">Pote Massa Especial</option>
+      </select>
+    </div>
+    
+    
 
     <!-- Tabela de Estoque -->
     <div class="row mb-3 table-responsive">
@@ -56,41 +75,22 @@
             <!-- Produtos selecionados serão carregados aqui -->
           </tbody>
         </table>
-        <button class="btn btn-primary w-100" id="finalizarCompraBtn" style="border: 1px solid #004C22; box-shadow: 5px 5px #004C22 ;">Finalizar Reserva</button>
-      </div>
-    </div>
-  </main>
-
-
-  {% include 'footer.html' %}
-
-  
-
-  <div class="cart-drawer__overlay">
-    <div class="cart-drawer d-flex flex-column justify-content-between">
-      <div class="cart-drawer__top">
-        <div class="cart-drawer__header bg-primary text-white p-2 d-flex justify-content-between">
-          <h4 class="cart-drawer__title">Carrinho</h4>
-          <button class="btn-close text-white" aria-label="Fechar"></button>
+        
+        <!-- Exibir Total Geral dos Produtos Selecionados -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <strong>Total Geral:</strong>
+          <strong>R$ <span id="totalGeral">0,00</span></strong>
         </div>
-        <div class="cart-drawer__body p-2">
-          <ul class="list-unstyled">
-            <!-- Itens do carrinho serão carregados dinamicamente -->
-          </ul>
-        </div>
-      </div>
-      <div class="cart-drawer__footer bg-light p-2">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-          <span>Total</span>
-          <span>R$ <span class="cart-total">0,00</span></span>
-        </div>
-        <button class="btn btn-primary w-100">Finalizar Reserva</button>
+        
+        <button class="btn btn-primary w-100" id="finalizarCompraBtn" style="border: 1px solid #004C22; box-shadow: 5px 5px #004C22;">Finalizar Reserva</button>
       </div>
     </div>
   </div>
 
+  {% include 'footer.html' %}
+
   <!-- Modal de Confirmação -->
-  <div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true";>
+  <div class="modal fade" id="confirmacaoModal" tabindex="-1" aria-labelledby="confirmacaoModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -135,7 +135,12 @@
               return '<input type="number" class="form-control form-control-sm quantity-picker" min="1" max="' + data + '" value="1">';
             }
           },
-          { data: 'valor' },
+          { 
+            data: 'valor',
+            render: function(data, type, row) {
+              return 'R$ ' + parseFloat(data).toFixed(2).replace('.', ',');
+            }
+          },
           {
             data: null,
             className: "dt-center",
@@ -144,13 +149,11 @@
         ]
       });
 
-      // Filtros
-      $('#categoriaFiltro').on('change', function () {
-        table.column(2).search(this.value).draw();
-      });
-      $('#subcategoriaFiltro').on('change', function () {
-        table.column(3).search(this.value).draw();
-      });
+      // Filtro de Subcategoria
+$('#subcategoriaFiltro').on('change', function () {
+  table.column(3).search(this.value).draw();  // Filtra a coluna de subcategorias (coluna 3)
+});
+
 
       // Produtos selecionados
       var selectedTable = $('#selecionadosTable').DataTable({
@@ -166,9 +169,9 @@
             }
           },
           { 
-            data: 'valor', 
+            data: 'valor',
             render: function(data, type, row) {
-              return 'R$ ' + (data * row.quantidade).toFixed(2);
+              return 'R$ ' + (data * row.quantidade).toFixed(2).replace('.', ',');
             }
           },
           {
@@ -200,13 +203,13 @@
         updateCartTotal();
       });
 
-      // Atualizar total do carrinho
+      // Atualizar total do carrinho e exibir na seção de total geral
       function updateCartTotal() {
         var total = 0;
         selectedTable.rows().data().each(function(value, index) {
           total += parseFloat(value.valor) * value.quantidade;
         });
-        $('.cart-total').text(total.toFixed(2));
+        $('#totalGeral').text(total.toFixed(2).replace('.', ','));
       }
 
       // Finalizar compra
@@ -215,7 +218,7 @@
           alert('Por favor, selecione ao menos um produto.');
           return;
         }
-
+        
         var pedido = [];
         selectedTable.rows().data().each(function(value, index) {
           pedido.push({
@@ -233,6 +236,7 @@
 
             $('#confirmarCompraBtn').on('click', function() {
               enviarPedido(pedido, true);
+              $('#confirmacaoModal').modal('hide');
             });
           } else {
             enviarPedido(pedido, false);

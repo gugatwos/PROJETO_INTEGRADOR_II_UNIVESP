@@ -28,7 +28,7 @@
       align-items: flex-start;
       justify-content: space-between;    
       max-height: 4em;   
-      border-bottom: 1px solid var(--dark-green);
+      border-bottom: 0px solid var(--dark-green);
       margin-bottom: 1em;      
     }
   
@@ -61,10 +61,10 @@
     .nav-link {
       width: 100px;
       text-align: center;
-      line-height: 2em;
+      line-height: 1.5em;
       text-decoration: none;
       font-size: 1em;
-      border-radius: 50%;
+      border-radius: 25%;
     }
   
    .nav-link:focus, .nav-link:hover {
@@ -156,15 +156,14 @@
   
   </style>
   <nav class="navbar-desktop">
-    <a class="nav-logo-wrap" href="{% url 'index' %}" >
       <img  class="nav-logo-img" src="{% static 'home/img/logo-frutos-de-goias.png' %}"  alt="Logo"/>
     </a>
     <ul class="nav-items">
       <li class="nav-item" ><a class="nav-link" href="{% url 'estoque' %}" >Estoque</a></li>
       <li class="nav-item"><a class="nav-link" href="{% url 'pedidos' %}" >Pedidos</a></li>
-      <li class="nav-item"><a class="nav-link" href="/home/sair/" >Sair</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'produtos_mais_pedidos' %}">Produtos Mais Pedidos</a></li>
+      <li class="nav-item"><a class="nav-link" href="/home/sair/" >Sair</a>
     </ul>
-    <a class="mais-vendidos" href="{% url 'produtos_mais_pedidos' %}">
       <img class="mais-vendidos-img" src="{% static 'lojistas/img/arara-frutos.png' %}" alt="Logo"/>
     </a>
   </nav>
